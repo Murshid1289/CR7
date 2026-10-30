@@ -1,0 +1,1249 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>B.O.A.T. — Ballon d'Or of All Time | Official Global Fan Vote</title>
+    <meta name="description"
+        content="Vote for the greatest Ballon d'Or-winning season in football history. The official 70th Anniversary global public vote by France Football & UEFA.">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700;800;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap"
+        rel="stylesheet">
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        gold: {
+                            50: '#FAF6ED',
+                            100: '#F4ECCC',
+                            200: '#EBD899',
+                            300: '#DFC266',
+                            400: '#D4AF37', /* Classic Ballon d'Or Gold */
+                            500: '#C59B27',
+                            600: '#A47D1C',
+                            700: '#7E5E15',
+                            800: '#5A420F',
+                            900: '#3D2C09',
+                        },
+                        obsidian: {
+                            950: '#07080B',
+                            900: '#0C0E14',
+                            800: '#141824',
+                            700: '#1C2233',
+                            600: '#283149',
+                        }
+                    },
+                    fontFamily: {
+                        cinzel: ['Cinzel', 'serif'],
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                        mono: ['"Space Grotesk"', 'monospace']
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Font Awesome & Lucide Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <!-- Canvas Confetti -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
+
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body
+    class="bg-obsidian-950 text-gray-100 font-sans antialiased selection:bg-gold-500 selection:text-black min-h-screen overflow-x-hidden">
+
+    <!-- Ambient Golden Glow Backgrounds -->
+    <div class="fixed inset-0 pointer-events-none z-0 overflow-hidden">
+        <div class="golden-orb orb-1"></div>
+        <div class="golden-orb orb-2"></div>
+        <div class="golden-orb orb-3"></div>
+        <div class="bg-grid-pattern opacity-10 absolute inset-0"></div>
+    </div>
+
+    <!-- Live Global Ticker Bar -->
+    <div
+        class="relative z-50 bg-gradient-to-r from-obsidian-950 via-gold-900/60 to-obsidian-950 border-b border-gold-500/20 py-1.5 px-4 text-xs font-mono tracking-wider overflow-hidden">
+        <div class="max-w-7xl mx-auto flex items-center justify-between gap-4">
+            <div class="flex items-center gap-2 text-gold-400 font-semibold shrink-0">
+                <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+                <span class="text-emerald-400">LIVE VOTING ACTIVE</span>
+                <span class="text-gray-500">|</span>
+                <span class="hidden sm:inline">70TH ANNIVERSARY INITIATIVE</span>
+            </div>
+
+            <!-- Scrolling vote marquee -->
+            <div class="overflow-hidden whitespace-nowrap flex-1 mx-4 text-gray-300 hidden md:block">
+                <div class="inline-block animate-marquee" id="liveTickerStream">
+                    <span>⚡ Over <strong class="text-gold-300" id="tickerTotalVotes">18,429,810</strong> fan votes cast
+                        worldwide</span>
+                    <span class="mx-4 text-gold-500">•</span>
+                    <span>🏆 Leader: <strong class="text-gold-300">Cristiano Ronaldo (2008)</strong> leading with
+                        <strong class="text-white">41.8%</strong></span>
+                    <span class="mx-4 text-gold-500">•</span>
+                    <span>⭐ Runner-up: <strong class="text-gold-300">Lionel Messi (2012)</strong> with <strong
+                            class="text-white">35.6%</strong></span>
+                    <span class="mx-4 text-gold-500">•</span>
+                    <span>🎫 Every vote enters the official Paris Ballon d'Or Gala VIP Sweepstakes</span>
+                </div>
+            </div>
+
+            <div class="flex items-center gap-3 shrink-0">
+                <button id="soundToggleBtn"
+                    class="text-gold-400 hover:text-gold-200 transition-colors flex items-center gap-1.5 text-xs bg-gold-950/60 px-2.5 py-1 rounded-full border border-gold-500/30">
+                    <i class="fa-solid fa-volume-high" id="soundIcon"></i>
+                    <span class="hidden sm:inline text-[11px]" id="soundStatusText">Sound On</span>
+                </button>
+                <div class="text-[11px] text-gray-400">
+                    <span class="text-gold-400 font-bold" id="liveOnlineCount">48,219</span> fans online
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Header Navigation -->
+    <header
+        class="sticky top-0 z-40 backdrop-blur-xl bg-obsidian-950/85 border-b border-gold-500/15 transition-all duration-300"
+        id="mainHeader" >
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            <!-- Brand / Logo -->
+            <a href="#hero" class="flex items-center gap-3.5 group">
+                <div
+                    class="relative w-12 h-12 flex items-center justify-center rounded-xl bg-gradient-to-br from-gold-300 via-gold-500 to-gold-700 p-0.5 shadow-lg shadow-gold-500/20 group-hover:shadow-gold-500/40 transition-shadow">
+                    <div class="w-full h-full bg-obsidian-950 rounded-[10px] flex items-center justify-center">
+                        <i
+                            class="fa-solid fa-trophy text-gold-400 text-xl group-hover:scale-110 transition-transform"></i>
+                    </div>
+                </div>
+                <div>
+                    <div class="flex items-center gap-2">
+                        <span
+                            class="font-cinzel font-bold text-lg tracking-wider text-transparent bg-clip-text bg-gradient-to-r from-gold-200 via-gold-400 to-amber-200">B.O.A.T.</span>
+                        <span
+                            class="bg-gold-500/20 border border-gold-500/40 text-gold-300 text-[10px] font-mono px-1.5 py-0.5 rounded tracking-normal">FAN
+                            VOTE</span>
+                    </div>
+                    <p class="text-[10px] uppercase tracking-widest text-gray-400 font-cinzel">Ballon d'Or of All Time
+                    </p>
+                </div>
+            </a>
+
+            <!-- Navigation Links -->
+            <nav class="hidden lg:flex items-center gap-7 text-sm font-medium">
+                <a href="#vote" class="text-gray-300 hover:text-gold-400 transition-colors flex items-center gap-2">
+                    <i class="fa-solid fa-check-to-slot text-gold-500 text-xs"></i> Cast Ballot
+                </a>
+                <a href="#bracket" class="text-gray-300 hover:text-gold-400 transition-colors flex items-center gap-2">
+                    <i class="fa-solid fa-diagram-project text-gold-500 text-xs"></i> Knockout Bracket
+                </a>
+                <a href="#leaderboard"
+                    class="text-gray-300 hover:text-gold-400 transition-colors flex items-center gap-2">
+                    <i class="fa-solid fa-chart-simple text-gold-500 text-xs"></i> Live Standings
+                </a>
+                <a href="#duel" class="text-gray-300 hover:text-gold-400 transition-colors flex items-center gap-2">
+                    <i class="fa-solid fa-bolt text-gold-500 text-xs"></i> Head-to-Head Duel
+                </a>
+                <a href="#history" class="text-gray-300 hover:text-gold-400 transition-colors flex items-center gap-2">
+                    <i class="fa-solid fa-crown text-gold-500 text-xs"></i> Super Ballon d'Or
+                </a>
+            </nav>
+
+            <!-- Actions: Pass Modal Button + Vote CTA -->
+            <div class="flex items-center gap-3">
+                <button id="viewPassBtn"
+                    class="hidden sm:flex items-center gap-2 bg-obsidian-800 hover:bg-obsidian-700 border border-gold-500/30 text-gold-300 text-xs font-semibold px-3.5 py-2 rounded-lg transition-all shadow-sm">
+                    <i class="fa-solid fa-ticket text-gold-400"></i>
+                    <span>My Voter Pass</span>
+                </button>
+                <a href="#vote" class="relative group overflow-hidden rounded-lg p-px font-semibold text-xs text-black">
+                    <span
+                        class="absolute inset-0 bg-gradient-to-r from-gold-300 via-gold-400 to-amber-500 group-hover:brightness-110 transition-all"></span>
+                    <span
+                        class="relative block px-4 py-2 bg-gradient-to-r from-gold-400 to-gold-500 rounded-[7px] text-obsidian-950 font-bold tracking-wide uppercase flex items-center gap-1.5 shadow-lg shadow-gold-500/25">
+                        <i class="fa-solid fa-fire text-xs"></i>
+                        <span>Vote Now</span>
+                    </span>
+                </a>
+                <!-- Mobile Menu Button -->
+                <button id="mobileMenuToggle" class="lg:hidden text-gray-300 hover:text-white p-2"
+                    aria-label="Toggle Navigation">
+                    <i class="fa-solid fa-bars text-xl"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile Navigation Drawer -->
+        <div id="mobileMenu"
+            class="lg:hidden hidden bg-obsidian-900 border-b border-gold-500/20 px-6 py-4 space-y-3 font-medium text-sm">
+            <a href="#vote" class="block text-gray-300 hover:text-gold-400 py-1 flex items-center gap-2"><i
+                    class="fa-solid fa-check-to-slot text-gold-500"></i> Cast Ballot</a>
+            <a href="#bracket" class="block text-gray-300 hover:text-gold-400 py-1 flex items-center gap-2"><i
+                    class="fa-solid fa-diagram-project text-gold-500"></i> Knockout Bracket</a>
+            <a href="#leaderboard" class="block text-gray-300 hover:text-gold-400 py-1 flex items-center gap-2"><i
+                    class="fa-solid fa-chart-simple text-gold-500"></i> Live Standings</a>
+            <a href="#duel" class="block text-gray-300 hover:text-gold-400 py-1 flex items-center gap-2"><i
+                    class="fa-solid fa-bolt text-gold-500"></i> Head-to-Head Duel</a>
+            <a href="#history" class="block text-gray-300 hover:text-gold-400 py-1 flex items-center gap-2"><i
+                    class="fa-solid fa-crown text-gold-500"></i> Super Ballon d'Or Legacy</a>
+            <button id="mobileViewPassBtn"
+                class="w-full text-left text-gold-300 py-2 flex items-center gap-2 border-t border-gold-500/20 mt-2">
+                <i class="fa-solid fa-ticket text-gold-400"></i> View My Official Voter Pass
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Content Container -->
+    <main class="relative z-10">
+
+        <!-- ================= HERO SECTION ================= -->
+        <section id="hero" class="relative pt-12 pb-20 md:pt-20 md:pb-28 overflow-hidden">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+
+                    <!-- Left Hero Narrative -->
+                    <div class="lg:col-span-7 space-y-6 text-center lg:text-left">
+                        <div
+                            class="inline-flex items-center gap-2.5 px-3.5 py-1.5 rounded-full bg-gold-950/60 border border-gold-500/30 text-gold-300 text-xs font-semibold backdrop-blur-md">
+                            <i class="fa-solid fa-star text-gold-400 text-xs"></i>
+                            <span>70 YEARS OF FRANCE FOOTBALL EXCELLENCE</span>
+                            <span class="text-gold-600">•</span>
+                            <span class="text-gray-300">1956 — 2026</span>
+                        </div>
+
+                        <h1
+                            class="text-4xl sm:text-5xl md:text-6xl xl:text-7xl font-cinzel font-black tracking-tight leading-[1.08] text-white">
+                            THE GREATEST <br>
+                            <span
+                                class="text-transparent bg-clip-text bg-gradient-to-r from-gold-100 via-gold-400 to-amber-500 drop-shadow-sm">
+                                BALLON D'OR
+                            </span> <br>
+                            OF ALL TIME.
+                        </h1>
+
+                        <p
+                            class="text-gray-300 text-base sm:text-lg leading-relaxed max-w-2xl mx-auto lg:mx-0 font-normal">
+                            To honor the 70th anniversary of football’s most prestigious individual award, <span
+                                class="text-gold-300 font-semibold">France Football</span> and <span
+                                class="text-gold-300 font-semibold">UEFA</span> launched the historic <strong
+                                class="text-white">B.O.A.T.</strong> global public vote. Decided entirely by the
+                            worldwide fans: <em class="text-gray-200">Which iconic individual season was the greatest in
+                                football history?</em>
+                        </p>
+
+                        <!-- Highlights Banner: CR7 2008 vs Messi 2012 -->
+                        <div
+                            class="p-4 rounded-xl bg-gradient-to-r from-obsidian-900/90 via-gold-950/30 to-obsidian-900/90 border border-gold-500/25 max-w-xl mx-auto lg:mx-0 backdrop-blur-md">
+                            <div class="flex items-center justify-between text-xs font-mono text-gray-400 mb-2">
+                                <span class="flex items-center gap-1.5 text-gold-400">
+                                    <i class="fa-solid fa-award"></i> INAUGURAL B.O.A.T. STANDINGS
+                                </span>
+                                <span>UPDATED REAL-TIME</span>
+                            </div>
+                            <div class="flex items-center justify-between gap-4">
+                                <div class="flex items-center gap-3">
+                                    <div
+                                        class="w-10 h-10 rounded-full bg-gradient-to-br from-gold-400 to-gold-700 flex items-center justify-center font-bold text-obsidian-950 text-sm ring-2 ring-gold-400">
+                                        #1
+                                    </div>
+                                    <div class="text-left">
+                                        <div class="font-bold text-white text-sm flex items-center gap-1.5">
+                                            Cristiano Ronaldo <span class="text-gold-400 text-xs">(2008)</span>
+                                            <span
+                                                class="bg-gold-500/20 text-gold-300 text-[10px] px-1.5 py-0.2 rounded font-mono">CROWNED</span>
+                                        </div>
+                                        <div class="text-xs text-gray-400">Manchester United • 42 Goals • UCL & EPL
+                                            Double</div>
+                                    </div>
+                                </div>
+                                <div class="text-right">
+                                    <div class="text-lg font-cinzel font-black text-gold-300" id="heroWinnerPct">41.8%
+                                    </div>
+                                    <div class="text-[10px] text-gray-400">7.7M+ Votes</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- CTA Buttons -->
+                        <div class="flex flex-wrap items-center justify-center lg:justify-start gap-4 pt-2">
+                            <a href="#vote"
+                                class="px-8 py-4 rounded-xl bg-gradient-to-r from-gold-400 via-gold-500 to-amber-600 text-obsidian-950 font-bold text-sm uppercase tracking-wider shadow-xl shadow-gold-500/25 hover:shadow-gold-500/40 hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center gap-2">
+                                <i class="fa-solid fa-hand-pointer text-base"></i>
+                                <span>Enter Official Fan Vote</span>
+                            </a>
+                            <a href="#bracket"
+                                class="px-7 py-4 rounded-xl bg-obsidian-900 hover:bg-obsidian-800 text-gray-200 border border-gold-500/30 font-semibold text-sm hover:border-gold-400 transition-all flex items-center gap-2">
+                                <i class="fa-solid fa-sitemap text-gold-400"></i>
+                                <span>View Knockout Bracket</span>
+                            </a>
+                        </div>
+
+                        <!-- Trust signals -->
+                        <div
+                            class="pt-4 flex flex-wrap items-center justify-center lg:justify-start gap-6 text-xs text-gray-400">
+                            <div class="flex items-center gap-2">
+                                <i class="fa-solid fa-shield-halved text-gold-400"></i>
+                                <span>1 Vote Per Verified Fan</span>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <i class="fa-solid fa-ticket text-gold-400"></i>
+                                <span>Paris Gala Sweepstake Included</span>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <i class="fa-solid fa-globe text-gold-400"></i>
+                                <span>194 Countries Participating</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right Hero Visual: Golden Ballon d'Or Centerpiece -->
+                    <div class="lg:col-span-5 relative flex items-center justify-center">
+                        <div class="relative w-full max-w-md aspect-square flex items-center justify-center">
+
+                            <!-- Rotating Golden Halo Rings -->
+                            <div class="absolute inset-0 rounded-full border border-gold-500/20 animate-spin-slow">
+                            </div>
+                            <div
+                                class="absolute inset-6 rounded-full border border-dashed border-gold-400/30 animate-spin-reverse-slow">
+                            </div>
+                            <div
+                                class="absolute inset-16 rounded-full bg-gradient-to-tr from-gold-600/10 via-gold-400/20 to-transparent blur-2xl">
+                            </div>
+
+                            <!-- Central Trophy Display Card -->
+                            <div
+                                class="relative z-10 w-80 h-96 rounded-2xl bg-gradient-to-b from-obsidian-800/90 via-obsidian-900/95 to-obsidian-950 p-6 border border-gold-500/40 shadow-2xl shadow-gold-500/20 flex flex-col items-center justify-between text-center overflow-hidden backdrop-blur-xl">
+
+                                <div
+                                    class="absolute -top-16 -right-16 w-36 h-36 bg-gold-400/10 rounded-full blur-2xl pointer-events-none">
+                                </div>
+
+                                <!-- Card Top Badge -->
+                                <div
+                                    class="w-full flex items-center justify-between text-[11px] font-mono text-gold-400">
+                                    <span class="flex items-center gap-1">
+                                        <i class="fa-solid fa-award"></i> FRANCE FOOTBALL
+                                    </span>
+                                    <span
+                                        class="bg-gold-500/20 text-gold-300 px-2 py-0.5 rounded-full border border-gold-500/30">
+                                        70TH JUBILEE
+                                    </span>
+                                </div>
+
+                                <!-- Golden Trophy Visual representation -->
+                                <div class="relative my-auto flex flex-col items-center group cursor-pointer"
+                                    onclick="document.getElementById('vote').scrollIntoView({behavior: 'smooth'})">
+                                    <div class="relative w-36 h-36 flex items-center justify-center">
+                                        <div
+                                            class="absolute inset-0 rounded-full bg-gradient-to-br from-gold-300 via-gold-500 to-amber-700 blur-lg opacity-60 group-hover:opacity-90 transition-opacity">
+                                        </div>
+                                        <div
+                                            class="relative w-32 h-32 rounded-full bg-gradient-to-br from-gold-200 via-gold-400 to-amber-600 p-1 shadow-2xl flex items-center justify-center">
+                                            <div
+                                                class="w-full h-full rounded-full bg-gradient-to-b from-gold-400 via-gold-600 to-obsidian-900 flex items-center justify-center overflow-hidden border border-gold-200/50">
+                                                <!-- Ballon d'Or geometric seam pattern -->
+                                                <div
+                                                    class="absolute inset-0 opacity-40 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-white via-transparent to-black">
+                                                </div>
+                                                <i
+                                                    class="fa-solid fa-trophy text-white text-5xl drop-shadow-[0_4px_16px_rgba(212,175,55,0.8)] group-hover:scale-110 transition-transform duration-500"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="mt-4">
+                                        <h3 class="font-cinzel font-bold text-xl text-gold-200 tracking-wider">B.O.A.T.
+                                            TROPHY</h3>
+                                        <p class="text-xs text-gray-400 font-medium">Ballon d'Or of All Time</p>
+                                    </div>
+                                </div>
+
+                                <!-- Card Footer: Quick Stats -->
+                                <div
+                                    class="w-full pt-4 border-t border-gold-500/20 grid grid-cols-3 gap-2 text-center text-xs">
+                                    <div>
+                                        <div class="text-gray-400 text-[10px]">CONTENDERS</div>
+                                        <div class="font-bold text-gold-300 font-mono">10 LEGENDS</div>
+                                    </div>
+                                    <div>
+                                        <div class="text-gray-400 text-[10px]">CRITERIA</div>
+                                        <div class="font-bold text-gold-300 font-mono">2+ BALLONS</div>
+                                    </div>
+                                    <div>
+                                        <div class="text-gray-400 text-[10px]">VOTES</div>
+                                        <div class="font-bold text-gold-300 font-mono">100% FANS</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= STATS COUNTER STRIP ================= -->
+        <section class="border-y border-gold-500/20 bg-obsidian-900/60 backdrop-blur-md py-6">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+                    <div class="p-2">
+                        <div class="text-2xl sm:text-3xl font-cinzel font-black text-gold-400"
+                            id="statTotalVotesDisplay">18.4M+</div>
+                        <div class="text-xs text-gray-400 uppercase tracking-widest mt-1">Verified Fan Votes</div>
+                    </div>
+                    <div class="p-2">
+                        <div class="text-2xl sm:text-3xl font-cinzel font-black text-gold-400">10</div>
+                        <div class="text-xs text-gray-400 uppercase tracking-widest mt-1">Multi-Ballon Icons</div>
+                    </div>
+                    <div class="p-2">
+                        <div class="text-2xl sm:text-3xl font-cinzel font-black text-gold-400">70 Years</div>
+                        <div class="text-xs text-gray-400 uppercase tracking-widest mt-1">Ballon d'Or Heritage</div>
+                    </div>
+                    <div class="p-2">
+                        <div class="text-2xl sm:text-3xl font-cinzel font-black text-gold-400">Oct 2026</div>
+                        <div class="text-xs text-gray-400 uppercase tracking-widest mt-1">Gala Sweepstake Draw</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= SECTION 1: CAST YOUR BALLOT (CORE VOTE) ================= -->
+        <section id="vote" class="py-20 relative">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+                <!-- Section Header -->
+                <div class="text-center max-w-3xl mx-auto mb-14">
+                    <div
+                        class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-gold-500/10 border border-gold-500/30 text-gold-400 text-xs font-semibold uppercase tracking-wider mb-3">
+                        <i class="fa-solid fa-check-double text-xs"></i> Official Fan Ballot
+                    </div>
+                    <h2 class="text-3xl sm:text-4xl md:text-5xl font-cinzel font-bold text-white tracking-tight">
+                        VOTE FOR THE <span
+                            class="text-transparent bg-clip-text bg-gradient-to-r from-gold-300 via-gold-400 to-amber-500">GREATEST
+                            SEASON</span>
+                    </h2>
+                    <p class="text-gray-400 mt-4 text-sm sm:text-base">
+                        Select a football legend's defining Ballon d'Or-winning individual campaign. Your vote updates
+                        the worldwide standings in real-time and generates your official Paris Gala Sweepstakes ticket.
+                    </p>
+
+                    <!-- Filter / Sort Controls -->
+                    <div class="mt-8 flex flex-wrap items-center justify-center gap-2 text-xs">
+                        <button
+                            class="filter-btn active px-4 py-2 rounded-lg border border-gold-500/30 bg-gold-500 text-obsidian-950 font-bold transition-all"
+                            data-filter="all">
+                            All 10 Contenders
+                        </button>
+                        <button
+                            class="filter-btn px-4 py-2 rounded-lg border border-gold-500/20 bg-obsidian-900 text-gray-300 hover:text-white hover:border-gold-500/50 transition-all"
+                            data-filter="modern">
+                            Modern Era (2000+)
+                        </button>
+                        <button
+                            class="filter-btn px-4 py-2 rounded-lg border border-gold-500/20 bg-obsidian-900 text-gray-300 hover:text-white hover:border-gold-500/50 transition-all"
+                            data-filter="classic">
+                            Classic Legends (1950-1999)
+                        </button>
+                        <button
+                            class="filter-btn px-4 py-2 rounded-lg border border-gold-500/20 bg-obsidian-900 text-gray-300 hover:text-white hover:border-gold-500/50 transition-all"
+                            data-filter="ucl">
+                            Champions League Winners
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Contenders Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6" id="contendersGrid">
+                    <!-- Populated dynamically via JS -->
+                </div>
+
+            </div>
+        </section>
+
+        <!-- ================= SECTION 2: TOURNAMENT KNOCKOUT BRACKET ================= -->
+        <section id="bracket" class="py-20 bg-obsidian-900/50 border-y border-gold-500/20 relative overflow-hidden">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+                <div class="text-center max-w-3xl mx-auto mb-14">
+                    <div
+                        class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-gold-500/10 border border-gold-500/30 text-gold-400 text-xs font-semibold uppercase tracking-wider mb-3">
+                        <i class="fa-solid fa-sitemap text-xs"></i> Elimination Bracket Challenge
+                    </div>
+                    <h2 class="text-3xl sm:text-4xl md:text-5xl font-cinzel font-bold text-white tracking-tight">
+                        THE B.O.A.T. <span
+                            class="text-transparent bg-clip-text bg-gradient-to-r from-gold-300 via-gold-400 to-amber-500">KNOCKOUT
+                            BRACKET</span>
+                    </h2>
+                    <p class="text-gray-400 mt-4 text-sm sm:text-base">
+                        Follow the direct head-to-head elimination ties. Click on any tie to vote or see how millions of
+                        fans picked between historical Ballon d'Or seasons!
+                    </p>
+                </div>
+
+                <!-- Interactive Bracket View -->
+                <div class="overflow-x-auto pb-6">
+                    <div class="min-w-[900px] grid grid-cols-3 gap-8 items-center" id="bracketContainer">
+
+                        <!-- Quarter-finals / Semifinals -->
+                        <div class="space-y-6">
+                            <div
+                                class="text-center font-cinzel text-xs tracking-wider text-gold-400 font-bold uppercase mb-4 flex items-center justify-center gap-2">
+                                <span>SEMIFINAL 1</span>
+                                <span class="text-gray-600">•</span>
+                                <span class="text-emerald-400 text-[10px]">VOTING CLOSED</span>
+                            </div>
+
+                            <!-- Matchup 1: CR7 2008 vs R9 1997 -->
+                            <div
+                                class="bracket-matchup p-4 rounded-xl bg-obsidian-950 border border-gold-500/30 shadow-lg relative group">
+                                <div class="text-[10px] font-mono text-gray-500 mb-2 flex justify-between">
+                                    <span>TIE #1</span>
+                                    <span class="text-gold-400 font-semibold">1,419,200 VOTES</span>
+                                </div>
+                                <div class="space-y-2">
+                                    <div
+                                        class="flex items-center justify-between p-2.5 rounded-lg bg-gold-500/15 border border-gold-500/40 font-semibold text-sm">
+                                        <div class="flex items-center gap-2">
+                                            <span class="text-lg">🇵🇹</span>
+                                            <span class="text-white">Cristiano Ronaldo '08</span>
+                                            <i class="fa-solid fa-circle-check text-gold-400 text-xs"></i>
+                                        </div>
+                                        <span class="font-mono text-gold-300 font-bold">64.2%</span>
+                                    </div>
+                                    <div
+                                        class="flex items-center justify-between p-2.5 rounded-lg bg-obsidian-800/80 border border-gray-700/40 text-gray-400 text-sm">
+                                        <div class="flex items-center gap-2">
+                                            <span class="text-lg">🇧🇷</span>
+                                            <span>Ronaldo Nazário '97</span>
+                                        </div>
+                                        <span class="font-mono">35.8%</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Matchup 2: Van Basten '88 vs Di Stéfano '57 -->
+                            <div
+                                class="bracket-matchup p-4 rounded-xl bg-obsidian-950 border border-gold-500/20 shadow-lg relative">
+                                <div class="text-[10px] font-mono text-gray-500 mb-2 flex justify-between">
+                                    <span>TIE #2</span>
+                                    <span class="text-gray-400">980,100 VOTES</span>
+                                </div>
+                                <div class="space-y-2">
+                                    <div
+                                        class="flex items-center justify-between p-2.5 rounded-lg bg-gold-500/15 border border-gold-500/40 font-semibold text-sm">
+                                        <div class="flex items-center gap-2">
+                                            <span class="text-lg">🇳🇱</span>
+                                            <span class="text-white">Marco van Basten '88</span>
+                                            <i class="fa-solid fa-circle-check text-gold-400 text-xs"></i>
+                                        </div>
+                                        <span class="font-mono text-gold-300 font-bold">58.4%</span>
+                                    </div>
+                                    <div
+                                        class="flex items-center justify-between p-2.5 rounded-lg bg-obsidian-800/80 border border-gray-700/40 text-gray-400 text-sm">
+                                        <div class="flex items-center gap-2">
+                                            <span class="text-lg">🇪🇸</span>
+                                            <span>Alfredo Di Stéfano '57</span>
+                                        </div>
+                                        <span class="font-mono">41.6%</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Grand Final Center Matchup -->
+                        <div class="space-y-6">
+                            <div
+                                class="text-center font-cinzel text-xs tracking-wider text-gold-300 font-bold uppercase mb-4 flex items-center justify-center gap-2">
+                                <i class="fa-solid fa-trophy text-gold-400"></i>
+                                <span>THE GRAND FINAL</span>
+                                <span
+                                    class="bg-red-500/20 text-red-400 text-[10px] px-1.5 py-0.5 rounded font-mono">HIGH
+                                    PEAK</span>
+                            </div>
+
+                            <div
+                                class="bracket-matchup p-6 rounded-2xl bg-gradient-to-b from-gold-950/40 via-obsidian-950 to-obsidian-950 border-2 border-gold-400/60 shadow-2xl shadow-gold-500/25 relative overflow-hidden">
+                                <div
+                                    class="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-gold-300 via-gold-500 to-amber-600">
+                                </div>
+
+                                <div class="text-center mb-4">
+                                    <span
+                                        class="text-[11px] font-mono uppercase tracking-widest text-gold-400 font-bold">B.O.A.T.
+                                        TITLE DECIDER</span>
+                                    <h4 class="font-cinzel text-lg font-bold text-white mt-1">THE TITANIC SHOWDOWN</h4>
+                                </div>
+
+                                <div class="space-y-4">
+                                    <!-- Finalist 1: CR7 2008 -->
+                                    <div class="p-3.5 rounded-xl bg-gold-500/20 border border-gold-400 relative">
+                                        <div class="flex items-center justify-between">
+                                            <div class="flex items-center gap-3">
+                                                <div
+                                                    class="w-9 h-9 rounded-full bg-gold-500 text-obsidian-950 font-bold flex items-center justify-center text-xs">
+                                                    CR7
+                                                </div>
+                                                <div>
+                                                    <div class="font-bold text-white text-sm flex items-center gap-1.5">
+                                                        Cristiano Ronaldo (2008)
+                                                        <i class="fa-solid fa-crown text-gold-400 text-xs"></i>
+                                                    </div>
+                                                    <div class="text-[11px] text-gray-300">Manchester United • 42 Goals
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="text-right">
+                                                <div class="font-mono text-base font-bold text-gold-300"
+                                                    id="finalCr7Pct">54.0%</div>
+                                                <div class="text-[10px] text-emerald-400 font-semibold">WINNER</div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- VS Badge -->
+                                    <div class="flex items-center justify-center">
+                                        <span
+                                            class="w-8 h-8 rounded-full bg-obsidian-800 border border-gold-500/40 text-gold-400 flex items-center justify-center font-cinzel text-xs font-bold shadow-md">
+                                            VS
+                                        </span>
+                                    </div>
+
+                                    <!-- Finalist 2: Messi 2012 -->
+                                    <div class="p-3.5 rounded-xl bg-obsidian-900 border border-gold-500/20 relative">
+                                        <div class="flex items-center justify-between">
+                                            <div class="flex items-center gap-3">
+                                                <div
+                                                    class="w-9 h-9 rounded-full bg-blue-600/30 border border-blue-400/40 text-blue-300 font-bold flex items-center justify-center text-xs">
+                                                    LM10
+                                                </div>
+                                                <div>
+                                                    <div class="font-bold text-white text-sm">Lionel Messi (2012)</div>
+                                                    <div class="text-[11px] text-gray-400">FC Barcelona • 91 Goals
+                                                        Record</div>
+                                                </div>
+                                            </div>
+                                            <div class="text-right">
+                                                <div class="font-mono text-base font-bold text-gray-300"
+                                                    id="finalMessiPct">46.0%</div>
+                                                <div class="text-[10px] text-gray-500">RUNNER-UP</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="mt-5 text-center">
+                                    <button onclick="castVote('cr7-2008')"
+                                        class="w-full py-2.5 bg-gradient-to-r from-gold-400 to-gold-600 text-obsidian-950 font-bold text-xs uppercase tracking-wider rounded-lg shadow-md hover:brightness-110 transition-all">
+                                        Vote In The Final
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Semifinal 2 -->
+                        <div class="space-y-6">
+                            <div
+                                class="text-center font-cinzel text-xs tracking-wider text-gold-400 font-bold uppercase mb-4 flex items-center justify-center gap-2">
+                                <span>SEMIFINAL 2</span>
+                                <span class="text-gray-600">•</span>
+                                <span class="text-emerald-400 text-[10px]">VOTING CLOSED</span>
+                            </div>
+
+                            <!-- Matchup 3: Messi 2012 vs Cruyff 1974 -->
+                            <div
+                                class="bracket-matchup p-4 rounded-xl bg-obsidian-950 border border-gold-500/30 shadow-lg relative">
+                                <div class="text-[10px] font-mono text-gray-500 mb-2 flex justify-between">
+                                    <span>TIE #3</span>
+                                    <span class="text-gold-400 font-semibold">1,380,450 VOTES</span>
+                                </div>
+                                <div class="space-y-2">
+                                    <div
+                                        class="flex items-center justify-between p-2.5 rounded-lg bg-gold-500/15 border border-gold-500/40 font-semibold text-sm">
+                                        <div class="flex items-center gap-2">
+                                            <span class="text-lg">🇦🇷</span>
+                                            <span class="text-white">Lionel Messi '12</span>
+                                            <i class="fa-solid fa-circle-check text-gold-400 text-xs"></i>
+                                        </div>
+                                        <span class="font-mono text-gold-300 font-bold">68.7%</span>
+                                    </div>
+                                    <div
+                                        class="flex items-center justify-between p-2.5 rounded-lg bg-obsidian-800/80 border border-gray-700/40 text-gray-400 text-sm">
+                                        <div class="flex items-center gap-2">
+                                            <span class="text-lg">🇳🇱</span>
+                                            <span>Johan Cruyff '74</span>
+                                        </div>
+                                        <span class="font-mono">31.3%</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Matchup 4: Platini '84 vs Beckenbauer '76 -->
+                            <div
+                                class="bracket-matchup p-4 rounded-xl bg-obsidian-950 border border-gold-500/20 shadow-lg relative">
+                                <div class="text-[10px] font-mono text-gray-500 mb-2 flex justify-between">
+                                    <span>TIE #4</span>
+                                    <span class="text-gray-400">895,300 VOTES</span>
+                                </div>
+                                <div class="space-y-2">
+                                    <div
+                                        class="flex items-center justify-between p-2.5 rounded-lg bg-gold-500/15 border border-gold-500/40 font-semibold text-sm">
+                                        <div class="flex items-center gap-2">
+                                            <span class="text-lg">🇫🇷</span>
+                                            <span class="text-white">Michel Platini '84</span>
+                                            <i class="fa-solid fa-circle-check text-gold-400 text-xs"></i>
+                                        </div>
+                                        <span class="font-mono text-gold-300 font-bold">55.1%</span>
+                                    </div>
+                                    <div
+                                        class="flex items-center justify-between p-2.5 rounded-lg bg-obsidian-800/80 border border-gray-700/40 text-gray-400 text-sm">
+                                        <div class="flex items-center gap-2">
+                                            <span class="text-lg">🇩🇪</span>
+                                            <span>Franz Beckenbauer '76</span>
+                                        </div>
+                                        <span class="font-mono">44.9%</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- ================= SECTION 3: LIVE LEADERBOARD & STATS ================= -->
+        <section id="leaderboard" class="py-20 relative">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+                <div class="text-center max-w-3xl mx-auto mb-14">
+                    <div
+                        class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-gold-500/10 border border-gold-500/30 text-gold-400 text-xs font-semibold uppercase tracking-wider mb-3">
+                        <i class="fa-solid fa-chart-line text-xs"></i> Official Standings
+                    </div>
+                    <h2 class="text-3xl sm:text-4xl md:text-5xl font-cinzel font-bold text-white tracking-tight">
+                        GLOBAL <span
+                            class="text-transparent bg-clip-text bg-gradient-to-r from-gold-300 via-gold-400 to-amber-500">LIVE
+                            LEADERBOARD</span>
+                    </h2>
+                    <p class="text-gray-400 mt-4 text-sm sm:text-base">
+                        Real-time tally of verified votes from across the world. Watch percentages dynamically recompute
+                        with each ballot submitted.
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+
+                    <!-- Main Leaderboard Table -->
+                    <div
+                        class="lg:col-span-8 bg-obsidian-900/80 rounded-2xl border border-gold-500/25 p-6 shadow-xl backdrop-blur-md">
+                        <div class="flex items-center justify-between mb-6 pb-4 border-b border-gold-500/20">
+                            <div>
+                                <h3 class="font-cinzel font-bold text-lg text-white">All-Time Campaign Standings</h3>
+                                <p class="text-xs text-gray-400 font-mono">10 Shortlisted Legends • Verified Public
+                                    Votes</p>
+                            </div>
+                            <div class="text-xs font-mono text-gold-400 flex items-center gap-1.5">
+                                <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                                Auto-Syncing
+                            </div>
+                        </div>
+
+                        <!-- Leaderboard Rows -->
+                        <div class="space-y-3.5" id="leaderboardRows">
+                            <!-- Populated dynamically via JS -->
+                        </div>
+                    </div>
+
+                    <!-- Right Column: Top Winner Spotlight Card -->
+                    <div class="lg:col-span-4 space-y-6">
+
+                        <!-- Winner Crown Box -->
+                        <div
+                            class="p-6 rounded-2xl bg-gradient-to-b from-gold-950/60 via-obsidian-900 to-obsidian-950 border-2 border-gold-400/50 shadow-2xl relative overflow-hidden">
+                            <div
+                                class="absolute -right-8 -top-8 w-32 h-32 bg-gold-400/15 rounded-full blur-xl pointer-events-none">
+                            </div>
+
+                            <div class="flex items-center justify-between mb-4">
+                                <span
+                                    class="bg-gold-500 text-obsidian-950 font-cinzel font-bold text-xs px-2.5 py-1 rounded-full uppercase tracking-wider flex items-center gap-1">
+                                    <i class="fa-solid fa-crown text-xs"></i> B.O.A.T. CHAMPION
+                                </span>
+                                <span class="font-mono text-xs text-gold-400">#1 WORLDWIDE</span>
+                            </div>
+
+                            <div class="text-center py-2">
+                                <div
+                                    class="w-24 h-24 mx-auto rounded-full bg-gradient-to-tr from-gold-300 via-gold-500 to-gold-700 p-1 mb-3 shadow-lg shadow-gold-500/30">
+                                    <div
+                                        class="w-full h-full rounded-full bg-obsidian-950 flex items-center justify-center overflow-hidden text-2xl font-black text-gold-300 font-cinzel">
+                                        CR7
+                                    </div>
+                                </div>
+                                <h4 class="font-cinzel text-xl font-black text-white">Cristiano Ronaldo</h4>
+                                <p class="text-xs text-gold-300 font-semibold mt-0.5">2007–08 Season • Manchester United
+                                </p>
+                            </div>
+
+                            <div
+                                class="bg-obsidian-950/80 rounded-xl p-4 border border-gold-500/20 my-4 space-y-2 text-xs">
+                                <div class="flex justify-between text-gray-300">
+                                    <span>Goals in Season:</span>
+                                    <strong class="text-white font-mono">42 Goals (49 Games)</strong>
+                                </div>
+                                <div class="flex justify-between text-gray-300">
+                                    <span>Major Trophies:</span>
+                                    <strong class="text-white font-mono">UCL + Premier League</strong>
+                                </div>
+                                <div class="flex justify-between text-gray-300">
+                                    <span>Individual Awards:</span>
+                                    <strong class="text-gold-300 font-mono">Ballon d'Or, FIFA POTY, Golden Boot</strong>
+                                </div>
+                                <div class="flex justify-between text-gray-300 border-t border-gray-800 pt-2">
+                                    <span>Public Vote Share:</span>
+                                    <strong class="text-gold-400 font-mono text-sm" id="spotlightPct">41.8%</strong>
+                                </div>
+                            </div>
+
+                            <p class="text-xs text-gray-400 italic text-center leading-relaxed">
+                                "The defining wing-forward masterclass that reshaped modern football athleticism and
+                                brought European glory to Old Trafford."
+                            </p>
+
+                            <button onclick="castVote('cr7-2008')"
+                                class="mt-4 w-full py-3 bg-gradient-to-r from-gold-400 to-gold-600 text-obsidian-950 font-bold text-xs uppercase tracking-wider rounded-xl shadow-lg hover:brightness-110 transition-all flex items-center justify-center gap-2">
+                                <i class="fa-solid fa-vote-yea"></i>
+                                <span>Support Cristiano's 2008 Season</span>
+                            </button>
+                        </div>
+
+                        <!-- Live Fan Vote Simulator Controls (Admin / Demo Tool) -->
+                        <div class="p-5 rounded-2xl bg-obsidian-900 border border-gold-500/20 text-xs">
+                            <div class="flex items-center justify-between mb-3 text-gold-400 font-semibold">
+                                <span class="flex items-center gap-1.5"><i class="fa-solid fa-sliders"></i> Interactive
+                                    Simulator</span>
+                                <span class="font-mono text-[10px] text-gray-500">LIVE TEST</span>
+                            </div>
+                            <p class="text-gray-400 text-[11px] mb-3">
+                                Test incoming vote surges from around the globe or reset to historical baseline.
+                            </p>
+                            <div class="grid grid-cols-2 gap-2">
+                                <button id="simulateVotesBtn"
+                                    class="py-2 px-3 rounded-lg bg-gold-950/80 hover:bg-gold-900 text-gold-300 border border-gold-500/30 text-[11px] font-semibold transition-all flex items-center justify-center gap-1.5">
+                                    <i class="fa-solid fa-bolt"></i> +10,000 Votes Surge
+                                </button>
+                                <button id="resetVotesBtn"
+                                    class="py-2 px-3 rounded-lg bg-obsidian-800 hover:bg-obsidian-700 text-gray-300 border border-gray-700 text-[11px] transition-all flex items-center justify-center gap-1.5">
+                                    <i class="fa-solid fa-rotate-left"></i> Reset Baseline
+                                </button>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+        </section>
+
+        <!-- ================= SECTION 4: HEAD-TO-HEAD DUEL MODE ================= -->
+        <section id="duel" class="py-20 bg-obsidian-900/40 border-y border-gold-500/20 relative">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+                <div class="text-center max-w-3xl mx-auto mb-14">
+                    <div
+                        class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-gold-500/10 border border-gold-500/30 text-gold-400 text-xs font-semibold uppercase tracking-wider mb-3">
+                        <i class="fa-solid fa-bolt text-xs"></i> 1-on-1 Head-To-Head Duel
+                    </div>
+                    <h2 class="text-3xl sm:text-4xl md:text-5xl font-cinzel font-bold text-white tracking-tight">
+                        THE ULTIMATE <span
+                            class="text-transparent bg-clip-text bg-gradient-to-r from-gold-300 via-gold-400 to-amber-500">HEAD-TO-HEAD</span>
+                    </h2>
+                    <p class="text-gray-400 mt-4 text-sm sm:text-base">
+                        Select any two Ballon d'Or winners and compare their statistics, trophies, and historical impact
+                        side by side in a direct duel vote.
+                    </p>
+                </div>
+
+                <!-- Duel Selector Controls -->
+                <div class="max-w-4xl mx-auto mb-8 grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-mono text-gold-400 mb-1">SELECT CONTENDER A:</label>
+                        <select id="duelSelectA"
+                            class="w-full bg-obsidian-950 border border-gold-500/30 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-gold-400 font-sans">
+                            <!-- Populated dynamically -->
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-mono text-gold-400 mb-1">SELECT CONTENDER B:</label>
+                        <select id="duelSelectB"
+                            class="w-full bg-obsidian-950 border border-gold-500/30 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-gold-400 font-sans">
+                            <!-- Populated dynamically -->
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Duel Comparison Arena -->
+                <div class="max-w-5xl mx-auto rounded-3xl bg-obsidian-950 border border-gold-500/30 p-6 sm:p-10 shadow-2xl relative overflow-hidden"
+                    id="duelArena">
+                    <!-- Populated dynamically via JS -->
+                </div>
+
+            </div>
+        </section>
+
+        <!-- ================= SECTION 5: SUPER BALLON D'OR & HISTORY ================= -->
+        <section id="history" class="py-20 relative">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+                <div class="text-center max-w-3xl mx-auto mb-16">
+                    <div
+                        class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-gold-500/10 border border-gold-500/30 text-gold-400 text-xs font-semibold uppercase tracking-wider mb-3">
+                        <i class="fa-solid fa-landmark text-xs"></i> Historical Heritage
+                    </div>
+                    <h2 class="text-3xl sm:text-4xl md:text-5xl font-cinzel font-bold text-white tracking-tight">
+                        SUPER BALLON D'OR <span
+                            class="text-transparent bg-clip-text bg-gradient-to-r from-gold-300 via-gold-400 to-amber-500">VS
+                            B.O.A.T.</span>
+                    </h2>
+                    <p class="text-gray-400 mt-4 text-sm sm:text-base">
+                        Understanding the distinction between France Football's legendary 1989 jury accolade and the
+                        modern 2026 worldwide fan vote.
+                    </p>
+                </div>
+
+                <!-- Historical Comparison Cards -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+
+                    <!-- 1989 Super Ballon d'Or Card -->
+                    <div
+                        class="p-8 rounded-2xl bg-obsidian-900/90 border border-gold-500/20 shadow-xl relative overflow-hidden">
+                        <div class="flex items-center justify-between text-xs font-mono text-gold-400 mb-4">
+                            <span>DECEMBER 24, 1989</span>
+                            <span class="bg-gold-500/20 px-2 py-0.5 rounded text-[10px]">HISTORICAL ONCE-EVER</span>
+                        </div>
+                        <h3 class="font-cinzel text-2xl font-bold text-white mb-2">The Super Ballon d'Or</h3>
+                        <p class="text-gray-300 text-sm leading-relaxed mb-6">
+                            Awarded only once in history by <em>France Football</em> to celebrate the 30th anniversary
+                            of the European Cup. Alfredo Di Stéfano was selected over Johan Cruyff and Michel Platini
+                            through a combination of jury journalists, former winners, and readers.
+                        </p>
+                        <div class="space-y-3 text-xs border-t border-gray-800 pt-4">
+                            <div class="flex justify-between text-gray-400">
+                                <span>Winner:</span>
+                                <strong class="text-gold-300">Alfredo Di Stéfano (Real Madrid)</strong>
+                            </div>
+                            <div class="flex justify-between text-gray-400">
+                                <span>Physical Trophy:</span>
+                                <strong class="text-white">Yes, special golden trophy with red rubies</strong>
+                            </div>
+                            <div class="flex justify-between text-gray-400">
+                                <span>Eligible:</span>
+                                <strong class="text-white">Only European/Naturalized European Players</strong>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 2026 B.O.A.T. Award Card -->
+                    <div
+                        class="p-8 rounded-2xl bg-gradient-to-br from-obsidian-900 via-gold-950/30 to-obsidian-900 border-2 border-gold-500/40 shadow-xl relative overflow-hidden">
+                        <div class="flex items-center justify-between text-xs font-mono text-gold-400 mb-4">
+                            <span>OCTOBER 1, 2026</span>
+                            <span
+                                class="bg-gold-500 text-obsidian-950 font-bold px-2 py-0.5 rounded text-[10px]">CURRENT
+                                FAN VOTE</span>
+                        </div>
+                        <h3 class="font-cinzel text-2xl font-bold text-white mb-2">The B.O.A.T. (Ballon d'Or of All
+                            Time)</h3>
+                        <p class="text-gray-300 text-sm leading-relaxed mb-6">
+                            A global public digital engagement vote organized by <em>France Football</em> and
+                            <em>UEFA</em> for the 70th Ballon d'Or anniversary. Rather than whole careers, fans vote for
+                            the single greatest Ballon d'Or-winning season from multi-time champions.
+                        </p>
+                        <div class="space-y-3 text-xs border-t border-gold-500/20 pt-4">
+                            <div class="flex justify-between text-gray-400">
+                                <span>Inaugural Winner:</span>
+                                <strong class="text-gold-300 font-bold">Cristiano Ronaldo (2008 Season)</strong>
+                            </div>
+                            <div class="flex justify-between text-gray-400">
+                                <span>Decision Method:</span>
+                                <strong class="text-white">100% Worldwide Public Fan Ballot</strong>
+                            </div>
+                            <div class="flex justify-between text-gray-400">
+                                <span>Sweepstake Prize:</span>
+                                <strong class="text-gold-400">VIP Passes to Ballon d'Or Paris Gala</strong>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </section>
+
+    </main>
+
+    <!-- ================= FOOTER ================= -->
+    <footer class="bg-obsidian-950 border-t border-gold-500/20 pt-16 pb-12 relative z-10 text-gray-400 text-xs">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
+
+                <div class="space-y-4 md:col-span-2">
+                    <div class="flex items-center gap-3">
+                        <div
+                            class="w-9 h-9 rounded-lg bg-gold-500 flex items-center justify-center text-obsidian-950 font-black">
+                            <i class="fa-solid fa-trophy"></i>
+                        </div>
+                        <span class="font-cinzel text-lg font-bold text-white">B.O.A.T. VOTING PORTAL</span>
+                    </div>
+                    <p class="text-gray-400 text-xs leading-relaxed max-w-md">
+                        The Ballon d'Or of All Time (B.O.A.T.) interactive fan voting system created to celebrate the
+                        70th Anniversary of football’s ultimate individual recognition. Honoring the multi-time
+                        champions and their defining seasons.
+                    </p>
+                    <div class="flex items-center gap-4 text-gold-400 text-base">
+                        <a href="#" class="hover:text-gold-200 transition-colors"><i
+                                class="fa-brands fa-x-twitter"></i></a>
+                        <a href="#" class="hover:text-gold-200 transition-colors"><i
+                                class="fa-brands fa-instagram"></i></a>
+                        <a href="#" class="hover:text-gold-200 transition-colors"><i
+                                class="fa-brands fa-youtube"></i></a>
+                        <a href="#" class="hover:text-gold-200 transition-colors"><i
+                                class="fa-brands fa-tiktok"></i></a>
+                    </div>
+                </div>
+
+                <div>
+                    <h4 class="font-cinzel font-bold text-white uppercase tracking-wider mb-4 text-xs">Voting Categories
+                    </h4>
+                    <ul class="space-y-2">
+                        <li><a href="#vote" class="hover:text-gold-400 transition-colors">All 10 Contenders</a></li>
+                        <li><a href="#bracket" class="hover:text-gold-400 transition-colors">Knockout Tournament</a>
+                        </li>
+                        <li><a href="#leaderboard" class="hover:text-gold-400 transition-colors">Live Global
+                                Standings</a></li>
+                        <li><a href="#duel" class="hover:text-gold-400 transition-colors">Head-to-Head Comparison</a>
+                        </li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="font-cinzel font-bold text-white uppercase tracking-wider mb-4 text-xs">Awards Heritage
+                    </h4>
+                    <ul class="space-y-2">
+                        <li><a href="#history" class="hover:text-gold-400 transition-colors">1989 Super Ballon d'Or</a>
+                        </li>
+                        <li><a href="#history" class="hover:text-gold-400 transition-colors">France Football
+                                1956–2026</a></li>
+                        <li><a href="#vote" class="hover:text-gold-400 transition-colors">CR7 2008 Defining Season</a>
+                        </li>
+                        <li><a href="#vote" class="hover:text-gold-400 transition-colors">Messi 2012 91-Goal Record</a>
+                        </li>
+                    </ul>
+                </div>
+
+            </div>
+
+            <div class="border-t border-gray-800/80 pt-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+                <p>© 2026 Ballon d'Or of All Time (B.O.A.T.) Fan Initiative. All rights reserved.</p>
+                <div class="flex items-center gap-6">
+                    <span class="text-gold-400 font-mono">CR7 2008 • INAUGURAL B.O.A.T. WINNER</span>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- ================= MODAL 1: CAST VOTE CONFIRMATION & PASS GENERATION ================= -->
+    <div id="voteModal"
+        class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-obsidian-950/85 backdrop-blur-md hidden opacity-0 transition-opacity duration-300">
+        <div class="relative w-full max-w-lg rounded-3xl bg-gradient-to-b from-obsidian-900 to-obsidian-950 border-2 border-gold-400/50 p-6 sm:p-8 shadow-2xl shadow-gold-500/20 transform scale-95 transition-transform duration-300"
+            id="voteModalCard">
+
+            <button id="closeVoteModalBtn"
+                class="absolute top-5 right-5 text-gray-400 hover:text-white text-lg w-8 h-8 rounded-full bg-obsidian-800 flex items-center justify-center">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+
+            <div class="text-center mb-6">
+                <div
+                    class="w-14 h-14 mx-auto rounded-2xl bg-gradient-to-br from-gold-300 via-gold-500 to-amber-700 p-0.5 shadow-lg shadow-gold-500/30 mb-3 flex items-center justify-center">
+                    <div class="w-full h-full bg-obsidian-950 rounded-[14px] flex items-center justify-center">
+                        <i class="fa-solid fa-check-to-slot text-gold-400 text-2xl"></i>
+                    </div>
+                </div>
+                <h3 class="font-cinzel text-xl sm:text-2xl font-bold text-white">Cast Your Official Ballot</h3>
+                <p class="text-xs text-gray-400 mt-1">Confirm your choice and claim your Paris Gala Sweepstake Pass</p>
+            </div>
+
+            <!-- Target Contender Preview -->
+            <div id="modalContenderSummary"
+                class="p-4 rounded-xl bg-gold-950/30 border border-gold-500/30 mb-6 flex items-center gap-4">
+                <!-- Dynamically injected -->
+            </div>
+
+            <!-- Voter Input Form -->
+            <form id="voterForm" class="space-y-4 text-xs">
+                <div>
+                    <label class="block font-mono text-gold-400 mb-1">YOUR FULL NAME / FAN ID</label>
+                    <input type="text" id="voterNameInput" required placeholder="e.g. Cristiano Fan / John Doe"
+                        class="w-full px-4 py-3 rounded-xl bg-obsidian-950 border border-gold-500/30 text-white focus:outline-none focus:border-gold-400">
+                </div>
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block font-mono text-gold-400 mb-1">COUNTRY</label>
+                        <input type="text" id="voterCountryInput" required placeholder="e.g. Portugal / United Kingdom"
+                            class="w-full px-4 py-3 rounded-xl bg-obsidian-950 border border-gold-500/30 text-white focus:outline-none focus:border-gold-400">
+                    </div>
+                    <div>
+                        <label class="block font-mono text-gold-400 mb-1">GALA SWEEPSTAKES ENTRY</label>
+                        <div
+                            class="px-3 py-3 rounded-xl bg-gold-500/10 border border-gold-500/30 text-gold-300 text-center font-mono font-bold">
+                            FREE VIP TICKET #
+                        </div>
+                    </div>
+                </div>
+
+                <div class="pt-2">
+                    <button type="submit"
+                        class="w-full py-4 rounded-xl bg-gradient-to-r from-gold-400 via-gold-500 to-amber-600 text-obsidian-950 font-bold uppercase tracking-wider text-sm shadow-xl shadow-gold-500/20 hover:brightness-110 active:scale-[0.98] transition-all flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-stamp text-base"></i>
+                        <span>Confirm Vote & Generate Official Pass</span>
+                    </button>
+                </div>
+                <p class="text-[10px] text-gray-400 text-center">
+                    By submitting, your vote is cryptographically logged into the Ballon d'Or 70th Jubilee digital
+                    ledger.
+                </p>
+            </form>
+
+        </div>
+    </div>
+
+    <!-- ================= MODAL 2: OFFICIAL VOTER PASS & GALA TICKET ================= -->
+    <div id="passModal"
+        class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-obsidian-950/90 backdrop-blur-md hidden opacity-0 transition-opacity duration-300">
+        <div
+            class="relative w-full max-w-2xl rounded-3xl bg-obsidian-950 border border-gold-500/40 p-6 sm:p-8 shadow-2xl transform scale-95 transition-transform duration-300">
+
+            <button id="closePassModalBtn"
+                class="absolute top-5 right-5 text-gray-400 hover:text-white text-lg w-8 h-8 rounded-full bg-obsidian-800 flex items-center justify-center">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+
+            <!-- VIP Golden Ticket Visual -->
+            <div id="voterPassVisual"
+                class="ticket-container relative rounded-2xl bg-gradient-to-br from-gold-950 via-obsidian-900 to-black p-6 sm:p-8 border-2 border-gold-400/70 shadow-2xl overflow-hidden text-white font-sans">
+                <!-- Foil accents -->
+                <div
+                    class="absolute -right-20 -bottom-20 w-60 h-60 bg-gold-400/20 rounded-full blur-3xl pointer-events-none">
+                </div>
+                <div class="ticket-perforations"></div>
+
+                <!-- Ticket Header -->
+                <div class="flex items-center justify-between border-b border-gold-500/30 pb-4 mb-6">
+                    <div class="flex items-center gap-3">
+                        <div
+                            class="w-12 h-12 rounded-xl bg-gradient-to-br from-gold-300 to-gold-600 flex items-center justify-center text-obsidian-950 text-xl font-bold shadow-md">
+                            <i class="fa-solid fa-trophy"></i>
+                        </div>
+                        <div>
+                            <div class="font-cinzel font-bold text-base text-gold-300 tracking-wider">BALLON D'OR DE
+                                FRANCE FOOTBALL</div>
+                            <div class="text-[10px] font-mono uppercase tracking-widest text-gray-400">70TH ANNIVERSARY
+                                • B.O.A.T. INAUGURAL VOTE</div>
+                        </div>
+                    </div>
+                    <div class="text-right">
+                        <span
+                            class="bg-gold-500 text-obsidian-950 font-mono font-bold text-[10px] px-2.5 py-1 rounded uppercase tracking-wider">
+                            VIP GALA ENTRY
+                        </span>
+                        <div class="text-[10px] font-mono text-gold-400 mt-1" id="ticketNumberDisplay">TICKET
+                            #BOAT-820194</div>
+                    </div>
+                </div>
+
+                <!-- Ticket Body Grid -->
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 my-4">
+                    <div class="sm:col-span-2 space-y-3">
+                        <div>
+                            <div class="text-[10px] font-mono text-gray-400 uppercase">OFFICIAL VOTER</div>
+                            <div class="text-lg font-bold text-white font-cinzel" id="ticketVoterName">Cristiano Ronaldo
+                                Fan</div>
+                        </div>
+                        <div class="grid grid-cols-2 gap-4 text-xs">
+                            <div>
+                                <div class="text-[10px] font-mono text-gray-400 uppercase">VOTED B.O.A.T. CHOICE</div>
+                                <div class="font-bold text-gold-300" id="ticketVotedPlayer">Cristiano Ronaldo (2008)
+                                </div>
+                            </div>
+                            <div>
+                                <div class="text-[10px] font-mono text-gray-400 uppercase">LOCATION / COUNTRY</div>
+                                <div class="font-bold text-gray-200" id="ticketVoterCountry">Global Ballot</div>
+                            </div>
+                        </div>
+                        <div class="text-[11px] text-gray-400 leading-snug pt-2 border-t border-gray-800">
+                            Valid sweepstakes entry for 2 VIP invitations to the Théâtre du Châtelet Ballon d'Or
+                            Ceremony in Paris.
+                        </div>
+                    </div>
+
+                    <!-- Holographic QR / Badge -->
+                    <div
+                        class="flex flex-col items-center justify-center p-3 rounded-xl bg-obsidian-950/80 border border-gold-500/30 text-center">
+                        <div class="w-24 h-24 bg-white p-1 rounded-lg flex items-center justify-center mb-2 shadow">
+                            <!-- Simulated styled QR code -->
+                            <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=BOAT-BALLON-DOR-VOTE-VERIFIED"
+                                alt="QR Verification" class="w-full h-full object-contain" />
+                        </div>
+                        <span class="text-[9px] font-mono text-gold-400 uppercase tracking-widest">VERIFIED VOTER</span>
+                    </div>
+                </div>
+
+                <!-- Ticket Footer Strip -->
+                <div
+                    class="pt-4 border-t border-gold-500/30 flex items-center justify-between text-[10px] font-mono text-gray-400">
+                    <span>SECURITY HASH: 0x7E...42CR7</span>
+                    <span>BALLONDOR.COM/BOAT-VERIFY</span>
+                </div>
+            </div>
+
+            <!-- Pass Action Buttons -->
+            <div class="mt-6 flex flex-wrap items-center justify-between gap-3">
+                <button id="downloadPassBtn"
+                    class="px-5 py-2.5 rounded-xl bg-gold-500 text-obsidian-950 font-bold text-xs uppercase tracking-wider hover:brightness-110 flex items-center gap-2">
+                    <i class="fa-solid fa-download"></i> Save / Print Pass
+                </button>
+                <button id="shareVoteBtn"
+                    class="px-5 py-2.5 rounded-xl bg-obsidian-800 border border-gold-500/30 text-gold-300 font-semibold text-xs hover:border-gold-400 flex items-center gap-2">
+                    <i class="fa-solid fa-share-nodes"></i> Share on Social Media
+                </button>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- ================= CONTENDER DETAIL DOSSIER MODAL ================= -->
+    <div id="dossierModal"
+        class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-obsidian-950/90 backdrop-blur-md hidden opacity-0 transition-opacity duration-300">
+        <div class="relative w-full max-w-3xl rounded-3xl bg-obsidian-900 border border-gold-500/40 p-6 sm:p-8 shadow-2xl max-h-[90vh] overflow-y-auto"
+            id="dossierModalCard">
+            <!-- Dynamically populated via JS -->
+        </div>
+    </div>
+
+    <!-- Application Script -->
+    <script src="app.js"></script>
+</body>
+
+</html>

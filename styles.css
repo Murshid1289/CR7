@@ -1,0 +1,173 @@
+/* ==========================================================================
+   B.O.A.T. — Ballon d'Or of All Time
+   Official Style Sheet & Gold Aesthetic System
+   ========================================================================== */
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+::-webkit-scrollbar-track {
+    background: #07080B;
+}
+::-webkit-scrollbar-thumb {
+    background: #3D2C09;
+    border-radius: 4px;
+    border: 1px solid rgba(212, 175, 55, 0.2);
+}
+::-webkit-scrollbar-thumb:hover {
+    background: #D4AF37;
+}
+
+/* Ambient Golden Glow Orbs */
+.golden-orb {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(100px);
+    opacity: 0.15;
+    pointer-events: none;
+    z-index: 0;
+}
+
+.orb-1 {
+    width: 600px;
+    height: 600px;
+    top: -150px;
+    left: -100px;
+    background: radial-gradient(circle, #D4AF37 0%, #C59B27 40%, transparent 70%);
+    animation: floatOrb 18s ease-in-out infinite alternate;
+}
+
+.orb-2 {
+    width: 700px;
+    height: 700px;
+    top: 40%;
+    right: -200px;
+    background: radial-gradient(circle, #EBD899 0%, #A47D1C 50%, transparent 75%);
+    animation: floatOrb 22s ease-in-out infinite alternate-reverse;
+}
+
+.orb-3 {
+    width: 500px;
+    height: 500px;
+    bottom: -100px;
+    left: 20%;
+    background: radial-gradient(circle, #D4AF37 0%, #7E5E15 60%, transparent 80%);
+    animation: floatOrb 15s ease-in-out infinite alternate;
+}
+
+@keyframes floatOrb {
+    0% { transform: translateY(0px) scale(1); }
+    50% { transform: translateY(40px) scale(1.08); }
+    100% { transform: translateY(-30px) scale(0.95); }
+}
+
+/* Subtle background grid pattern */
+.bg-grid-pattern {
+    background-size: 40px 40px;
+    background-image: 
+        linear-gradient(to right, rgba(212, 175, 55, 0.05) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(212, 175, 55, 0.05) 1px, transparent 1px);
+}
+
+/* Marquee Animation */
+@keyframes marquee {
+    0% { transform: translateX(0%); }
+    100% { transform: translateX(-50%); }
+}
+
+.animate-marquee {
+    display: inline-block;
+    white-space: nowrap;
+    animation: marquee 35s linear infinite;
+}
+
+.animate-marquee:hover {
+    animation-play-state: paused;
+}
+
+/* Trophy Halo Slow Rotations */
+@keyframes spinSlow {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+@keyframes spinReverseSlow {
+    from { transform: rotate(360deg); }
+    to { transform: rotate(0deg); }
+}
+
+.animate-spin-slow {
+    animation: spinSlow 30s linear infinite;
+}
+.animate-spin-reverse-slow {
+    animation: spinReverseSlow 25s linear infinite;
+}
+
+/* Contender Card Hover Effects */
+.contender-card {
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.3s ease;
+}
+.contender-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 20px 35px -10px rgba(212, 175, 55, 0.15);
+    border-color: rgba(212, 175, 55, 0.6);
+}
+
+/* Golden Foil Shine */
+.golden-foil {
+    background: linear-gradient(135deg, #FAF6ED 0%, #D4AF37 50%, #7E5E15 100%);
+}
+
+.golden-foil-text {
+    background: linear-gradient(135deg, #FAF6ED 0%, #DFC266 30%, #D4AF37 60%, #FAF6ED 90%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+/* Ticket Styling & Perforations */
+.ticket-container {
+    background-image: 
+        radial-gradient(ellipse at top left, rgba(212, 175, 55, 0.18) 0%, transparent 60%),
+        radial-gradient(ellipse at bottom right, rgba(212, 175, 55, 0.12) 0%, transparent 60%),
+        linear-gradient(145deg, #120e06 0%, #0c0e14 100%);
+    position: relative;
+}
+
+.ticket-perforations {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 32%;
+    width: 2px;
+    border-right: 2px dashed rgba(212, 175, 55, 0.3);
+    pointer-events: none;
+}
+
+@media (max-width: 640px) {
+    .ticket-perforations {
+        display: none;
+    }
+}
+
+/* Progress Bar Transitions */
+.vote-progress-fill {
+    transition: width 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Ripple Animation when voting */
+@keyframes rippleEffect {
+    0% {
+        transform: scale(0.8);
+        opacity: 1;
+    }
+    100% {
+        transform: scale(2.4);
+        opacity: 0;
+    }
+}
+
+.ripple-active {
+    animation: rippleEffect 0.6s ease-out;
+}
+
